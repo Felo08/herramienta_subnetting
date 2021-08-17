@@ -13,7 +13,7 @@ def main():
  
     datos_entrada = entrada.split(" ")
  
-    numero = datos_entrada[0]
+    numero = datos_entrada[0].split(".")
     tipo = datos_entrada[1]
  
     conversion = funciones.convertidor(numero, tipo)
