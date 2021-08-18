@@ -15,7 +15,7 @@ def convertidor(num_convertir, tipo):
 		if tipo == "d":
 			suma = 0
 			exponente = 0
-			for pos_bit in range(-1,(-1* (octeto.length + 1)),-1):
+			for pos_bit in range(-1,-9,-1):
 				suma += int(octeto[pos_bit]) * (2**exponente)
 				exponente += 1
 				
@@ -74,15 +74,15 @@ def nueva_mascara_subnormal(hosts_solicitados, mascara_binaria):
 	bits_encender = exponente(hosts_solicitados)
 	cambio = False
 	mascara_nueva = []
-	mascara_nueva[0] = mascara_binaria[0]
+	mascara_nueva.append(mascara_binaria[0])
 	
 	for octeto in mascara_binaria:
 		if octeto == "00000000" and cambio == False:
 			encendido = 0
-			while encendido < bits_encender:
-				octeto[encendido] = "1"
-				encendido += 1
+			nuevo_octeto = "1"*bits_encender
+			nuevo_octeto += "0"* (8 - bits_encender)
 
+			octeto = nuevo_octeto
 			cambio = True
 		mascara_nueva.append(octeto)
 	
@@ -108,16 +108,16 @@ def informacion(salto_red, hosts_solicitados, ip_ingresada):
 	broadcast = ["Broadcast"]
 
 	ip_red = ip_ingresada
-
-	for i in range(1,(hosts_solicitados+1)):
-		subredes[i] = ip_red
-		primera_ip[i] = ip_red[0:3] + str(int(ip_red[3]) + 1)
-		ultima_ip[i] = ip_red[0:3] + str(int(ip_red[3]) + (salto_red - 2))
-		broadcast[i] = ip_red[0:3] + str(int(ip_red[3]) + (salto_red - 1))
+	octetos_ip = ip_red[0] + "." + ip_red[1] + "." + ip_red[2] 
+	for i in range(1,(int(hosts_solicitados) + 1)):
+		subredes.append(octetos_ip + "." + ip_red[3])
+		primera_ip.append(octetos_ip + "." + str(int(ip_red[3]) + 1))
+		ultima_ip.append(octetos_ip + "." + str(int(ip_red[3]) + (salto_red - 2)))
+		broadcast.append(octetos_ip + "." + str(int(ip_red[3]) + (salto_red - 1)))
 
 		ip_red[3] = str(int(ip_red[3]) + salto_red)
 
 	print("# \t" + subredes[0] + " \t " + primera_ip[0] + " \t " + ultima_ip[0] + " \t " + broadcast[0])
 
-	for j in range(1, (hosts_solicitados+1) ):
-		print("# \t" + subredes[j] + " \t " + primera_ip[j] + " \t " + ultima_ip[j] + " \t " + broadcast[j])
+	for j in range(1, (int(hosts_solicitados) + 1) ):
+		print(str(j) + str(subredes[j]) + " \t " + str(primera_ip[j]) + " \t " + str(ultima_ip[j]) + " \t " + str(broadcast[j]))
