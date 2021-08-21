@@ -120,4 +120,4 @@ def informacion(salto_red, hosts_solicitados, ip_ingresada):
 	print("# \t" + subredes[0] + " \t " + primera_ip[0] + " \t " + ultima_ip[0] + " \t " + broadcast[0])
 
 	for j in range(1, (int(hosts_solicitados) + 1) ):
-		print(str(j) + str(subredes[j]) + " \t " + str(primera_ip[j]) + " \t " + str(ultima_ip[j]) + " \t " + str(broadcast[j]))
+		print(str(j)+ "  " + str(subredes[j]) + " \t " + str(primera_ip[j]) + " \t " + str(ultima_ip[j]) + " \t " + str(broadcast[j]))
