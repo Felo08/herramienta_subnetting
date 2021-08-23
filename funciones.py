@@ -1,4 +1,6 @@
 
+import ipaddress
+from tabulate import tabulate
 
 ####################### CONVERTIDOR ##############################
 # Convierte las direcciones IPv4 de decimal a binario y viceversa
@@ -92,7 +94,7 @@ def nueva_mascara_subnormal(hosts_solicitados, mascara_binaria):
 ################# SALTO DE RED ########################
 def salto_red(mascara_nueva_decimal):
 	constante = 256
-	salto = 0
+	salto = 1
 	for octeto in mascara_nueva_decimal:
 		if octeto != "255":
 			salto = 256 - int(octeto)
@@ -107,17 +109,21 @@ def informacion(salto_red, hosts_solicitados, ip_ingresada):
 	ultima_ip = ["ultima ip utilizable"]
 	broadcast = ["Broadcast"]
 
-	ip_red = ip_ingresada
-	octetos_ip = ip_red[0] + "." + ip_red[1] + "." + ip_red[2] 
+	ip_red = ipaddress.IPv4Address(".".join(ip_ingresada))
+	
 	for i in range(1,(int(hosts_solicitados) + 1)):
-		subredes.append(octetos_ip + "." + ip_red[3])
-		primera_ip.append(octetos_ip + "." + str(int(ip_red[3]) + 1))
-		ultima_ip.append(octetos_ip + "." + str(int(ip_red[3]) + (salto_red - 2)))
-		broadcast.append(octetos_ip + "." + str(int(ip_red[3]) + (salto_red - 1)))
+		subredes.append(format(ip_red))
+		primera_ip.append(format(ip_red + 1))
+		ultima_ip.append(format(ip_red + (salto_red - 2)))
+		broadcast.append(format(ip_red + (salto_red - 1)))
 
-		ip_red[3] = str(int(ip_red[3]) + salto_red)
+		ip_red += salto_red
 
-	print("# \t" + subredes[0] + " \t " + primera_ip[0] + " \t " + ultima_ip[0] + " \t " + broadcast[0])
+	
+	tabla = []
+	tabla.append(["#", subredes[0], primera_ip[0], ultima_ip[0], broadcast[0]])
 
 	for j in range(1, (int(hosts_solicitados) + 1) ):
-		print(str(j) + str(subredes[j]) + " \t " + str(primera_ip[j]) + " \t " + str(ultima_ip[j]) + " \t " + str(broadcast[j]))
+		tabla.append([str(j), subredes[j], primera_ip[j], ultima_ip[j], broadcast[j]])
+	
+	print(tabulate(tabla, headers='firstrow'))

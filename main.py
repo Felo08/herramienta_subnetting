@@ -4,6 +4,7 @@ Created on Sat Aug 14 22:41:54 2021
 
 @author: felipe
 """
+from tabulate import tabulate
 import funciones
 
 def main():
@@ -36,7 +37,8 @@ def main():
 
     salto_de_red = funciones.salto_red(mascara_nueva_decimal)
 
-    funciones.informacion(salto_de_red, hosts_solicitados, ip_array)
+    print(tabulate([["mascara", ".".join(mascara_nueva_decimal),"\t","salto", str(salto_de_red)]], tablefmt='grid'))
 
+    funciones.informacion(salto_de_red, hosts_solicitados, ip_array)
 
 main()
